@@ -21,11 +21,6 @@
       --card: rgba(255, 255, 255, 0.07);
       --border: rgba(255, 255, 255, 0.12);
       --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-      --yt: #ff1f1f;
-      --tk: #00f2ea;
-      --tw: #9146ff;
-      --dc: #5865f2;
-      --gold: #fbbf24;
     }
 
     body {
@@ -34,6 +29,11 @@
       color: var(--text);
       overflow-x: hidden;
       position: relative;
+      transition: background 0.35s ease;
+    }
+
+    body.live-mode {
+      background: radial-gradient(circle at top, #3b0a0a 0%, #220909 40%, #120505 100%);
     }
 
     canvas#particles {
@@ -123,6 +123,12 @@
       animation: fadeUp 0.85s ease;
       position: relative;
       overflow: hidden;
+      transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+    }
+
+    body.live-mode .card {
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 0, 0, 0.18);
+      border-color: rgba(255, 0, 0, 0.25);
     }
 
     .card::before {
@@ -330,6 +336,30 @@
       box-shadow: 0 0 25px rgba(88, 101, 242, 0.25);
     }
 
+    .live-join {
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    .live-join.show {
+      display: block;
+    }
+
+    .live-join a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 22px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ff2b2b, #b40000);
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 0 28px rgba(255, 0, 0, 0.35);
+      animation: pulseLive 1.4s infinite;
+    }
+
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -524,6 +554,10 @@
         ⚫ Hors ligne sur Twitch
       </div>
 
+      <div class="live-join" id="liveJoinButton">
+        <a href="https://www.twitch.tv/jojo_legameur" target="_blank">🔴 Rejoindre le live</a>
+      </div>
+
       <div id="nextLiveCountdown" class="mini">
         ⏳ Calcul du prochain live...
       </div>
@@ -550,15 +584,22 @@
         </div>
 
         <div id="adminMessageBox" style="display:none; margin-top:16px;">
-          <input
-            id="adminMessageInput"
-            class="admin-input"
-            type="text"
-            placeholder="Message admin du moment"
-          />
-          <button class="mini-link" id="saveAdminMessage" type="button">
-            📢 Mettre à jour le message
-          </button>
+          <input id="adminMessageInput" class="admin-input" type="text" placeholder="Message admin du moment" />
+          <button class="mini-link" id="saveAdminMessage" type="button">📢 Mettre à jour le message</button>
+        </div>
+
+        <div id="adminStatsBox" style="display:none; margin-top:16px;">
+          <input id="youtubeCountInput" class="admin-input" type="text" placeholder="Abonnés YouTube" />
+          <input id="twitchCountInput" class="admin-input" type="text" placeholder="Followers Twitch" />
+          <input id="tiktokCountInput" class="admin-input" type="text" placeholder="Followers TikTok" />
+          <button class="mini-link" id="saveStatsBtn" type="button">📊 Mettre à jour les stats</button>
+        </div>
+
+        <div id="adminGamesBox" style="display:none; margin-top:16px;">
+          <input id="game1Input" class="admin-input" type="text" placeholder="Jeu 1" />
+          <input id="game2Input" class="admin-input" type="text" placeholder="Jeu 2" />
+          <input id="game3Input" class="admin-input" type="text" placeholder="Jeu 3" />
+          <button class="mini-link" id="saveGamesBtn" type="button">🎮 Mettre à jour les jeux</button>
         </div>
       </div>
 
@@ -599,27 +640,22 @@
       <h2 class="section-title">Ma communauté</h2>
       <div class="stats">
         <div class="stat-box">
-          <h3>19</h3>
+          <h3 id="youtubeCountValue">19</h3>
           <p>Abonnés YouTube</p>
         </div>
         <div class="stat-box">
-          <h3>12</h3>
+          <h3 id="twitchCountValue">12</h3>
           <p>Followers Twitch</p>
         </div>
         <div class="stat-box">
-          <h3>3181</h3>
+          <h3 id="tiktokCountValue">3181</h3>
           <p>Followers TikTok</p>
         </div>
       </div>
 
       <h2 class="section-title">Dernière vidéo</h2>
       <div class="youtube-video">
-        <iframe
-          src="https://www.youtube.com/embed/DQAxSYAjT64"
-          title="Dernière vidéo YouTube"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen>
-        </iframe>
+        <iframe src="https://www.youtube.com/embed/DQAxSYAjT64" title="Dernière vidéo YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
 
       <h2 class="section-title">À propos de moi</h2>
@@ -669,9 +705,9 @@
       <h2 class="section-title">Jeux du moment</h2>
       <div class="community-box">
         <div class="community-links">
-          <div class="mini-link">🎮 GTA RP</div>
-          <div class="mini-link">🏪 Better Mart</div>
-          <div class="mini-link">🔥 Autres jeux</div>
+          <div class="mini-link" id="game1Value">🎮 GTA RP</div>
+          <div class="mini-link" id="game2Value">🏪 Better Mart</div>
+          <div class="mini-link" id="game3Value">🔥 Autres jeux</div>
         </div>
       </div>
 
@@ -698,13 +734,7 @@
   </div>
 
   <script>
-    const words = [
-      'Streamer Twitch',
-      'Créateur YouTube',
-      'Gaming & Ambiance',
-      'Rejoins la commu'
-    ];
-
+    const words = ['Streamer Twitch', 'Créateur YouTube', 'Gaming & Ambiance', 'Rejoins la commu'];
     const typedText = document.getElementById('typedText');
     let wordIndex = 0;
     let charIndex = 0;
@@ -712,7 +742,6 @@
 
     function typeEffect() {
       const currentWord = words[wordIndex];
-
       if (!deleting) {
         typedText.textContent = currentWord.substring(0, charIndex + 1);
         charIndex++;
@@ -729,10 +758,8 @@
           wordIndex = (wordIndex + 1) % words.length;
         }
       }
-
       setTimeout(typeEffect, deleting ? 50 : 90);
     }
-
     typeEffect();
 
     const cursorGlow = document.getElementById('cursorGlow');
@@ -764,7 +791,6 @@
     function createParticles() {
       particles = [];
       const count = window.innerWidth < 700 ? 35 : 65;
-
       for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * canvas.width,
@@ -779,26 +805,21 @@
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'rgba(255,255,255,0.65)';
-
       for (const p of particles) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
-
         p.x += p.dx;
         p.y += p.dy;
-
         if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
       }
-
       requestAnimationFrame(animateParticles);
     }
 
     resizeCanvas();
     createParticles();
     animateParticles();
-
     window.addEventListener('resize', () => {
       resizeCanvas();
       createParticles();
@@ -807,7 +828,6 @@
     const music = document.getElementById('bgMusic');
     const musicToggle = document.getElementById('musicToggle');
     let isPlaying = false;
-
     musicToggle.addEventListener('click', async () => {
       try {
         if (!isPlaying) {
@@ -842,11 +862,32 @@
     const adminMessageInput = document.getElementById('adminMessageInput');
     const saveAdminMessage = document.getElementById('saveAdminMessage');
 
+    const adminStatsBox = document.getElementById('adminStatsBox');
+    const youtubeCountInput = document.getElementById('youtubeCountInput');
+    const twitchCountInput = document.getElementById('twitchCountInput');
+    const tiktokCountInput = document.getElementById('tiktokCountInput');
+    const saveStatsBtn = document.getElementById('saveStatsBtn');
+
+    const adminGamesBox = document.getElementById('adminGamesBox');
+    const game1Input = document.getElementById('game1Input');
+    const game2Input = document.getElementById('game2Input');
+    const game3Input = document.getElementById('game3Input');
+    const saveGamesBtn = document.getElementById('saveGamesBtn');
+
     const liveBadge = document.getElementById('liveBadge');
+    const liveJoinButton = document.getElementById('liveJoinButton');
     const nextLiveCountdown = document.getElementById('nextLiveCountdown');
     const twitchStatusBox = document.getElementById('twitchStatusBox').querySelector('h3');
     const youtubeStatusBox = document.getElementById('youtubeStatusBox').querySelector('h3');
     const tiktokStatusBox = document.getElementById('tiktokStatusBox').querySelector('h3');
+
+    const youtubeCountValue = document.getElementById('youtubeCountValue');
+    const twitchCountValue = document.getElementById('twitchCountValue');
+    const tiktokCountValue = document.getElementById('tiktokCountValue');
+
+    const game1Value = document.getElementById('game1Value');
+    const game2Value = document.getElementById('game2Value');
+    const game3Value = document.getElementById('game3Value');
 
     const toggleTwitch = document.getElementById('toggleTwitch');
     const toggleYoutube = document.getElementById('toggleYoutube');
@@ -867,6 +908,8 @@
     function updateAdminUI() {
       adminButtons.style.display = isAdmin ? 'grid' : 'none';
       adminMessageBox.style.display = isAdmin ? 'block' : 'none';
+      adminStatsBox.style.display = isAdmin ? 'block' : 'none';
+      adminGamesBox.style.display = isAdmin ? 'block' : 'none';
       adminLogoutBtn.style.display = isAdmin ? 'block' : 'none';
       adminLoginBtn.style.display = isAdmin ? 'none' : 'block';
     }
@@ -878,6 +921,22 @@
       } else {
         nextLiveCountdown.style.display = 'none';
         toggleCountdown.textContent = '⏳ Afficher le décompte';
+      }
+    }
+
+    function updateLiveUI() {
+      if (twitchLive) {
+        liveBadge.innerHTML = '<span class="live-dot"></span> 🔴 EN LIVE SUR TWITCH';
+        twitchStatusBox.textContent = 'ON';
+        toggleTwitch.textContent = '⚫ Désactiver LIVE Twitch';
+        liveJoinButton.classList.add('show');
+        document.body.classList.add('live-mode');
+      } else {
+        liveBadge.innerHTML = '<span class="live-dot"></span> ⚫ Hors ligne sur Twitch';
+        twitchStatusBox.textContent = 'OFF';
+        toggleTwitch.textContent = '🔴 Activer LIVE Twitch';
+        liveJoinButton.classList.remove('show');
+        document.body.classList.remove('live-mode');
       }
     }
 
@@ -905,25 +964,13 @@
 
     toggleTwitch.addEventListener('click', () => {
       if (!isAdmin) return;
-
       twitchLive = !twitchLive;
-
-      if (twitchLive) {
-        liveBadge.innerHTML = '<span class="live-dot"></span> 🔴 EN LIVE SUR TWITCH';
-        twitchStatusBox.textContent = 'ON';
-        toggleTwitch.textContent = '⚫ Désactiver LIVE Twitch';
-      } else {
-        liveBadge.innerHTML = '<span class="live-dot"></span> ⚫ Hors ligne sur Twitch';
-        twitchStatusBox.textContent = 'OFF';
-        toggleTwitch.textContent = '🔴 Activer LIVE Twitch';
-      }
+      updateLiveUI();
     });
 
     toggleYoutube.addEventListener('click', () => {
       if (!isAdmin) return;
-
       youtubeOn = !youtubeOn;
-
       if (youtubeOn) {
         youtubeStatusBox.textContent = 'ON';
         toggleYoutube.textContent = '⏸️ Désactiver vidéo YouTube';
@@ -935,9 +982,7 @@
 
     toggleTiktok.addEventListener('click', () => {
       if (!isAdmin) return;
-
       tiktokOn = !tiktokOn;
-
       if (tiktokOn) {
         tiktokStatusBox.textContent = 'ON';
         toggleTiktok.textContent = '⏸️ Désactiver TikTok';
@@ -949,7 +994,6 @@
 
     toggleCountdown.addEventListener('click', () => {
       if (!isAdmin) return;
-
       countdownVisible = !countdownVisible;
       localStorage.setItem('jojo_countdown', countdownVisible);
       updateCountdownUI();
@@ -958,16 +1002,61 @@
     saveAdminMessage.addEventListener('click', () => {
       const newMessage = adminMessageInput.value.trim();
       if (!isAdmin || !newMessage) return;
-
       adminAnnouncement.textContent = newMessage;
       localStorage.setItem('jojo_admin_message', newMessage);
       adminMessageInput.value = '';
       alert('Message mis à jour ✅');
     });
 
+    saveStatsBtn.addEventListener('click', () => {
+      if (!isAdmin) return;
+      if (youtubeCountInput.value.trim()) youtubeCountValue.textContent = youtubeCountInput.value.trim();
+      if (twitchCountInput.value.trim()) twitchCountValue.textContent = twitchCountInput.value.trim();
+      if (tiktokCountInput.value.trim()) tiktokCountValue.textContent = tiktokCountInput.value.trim();
+      localStorage.setItem('jojo_stats', JSON.stringify({
+        youtube: youtubeCountValue.textContent,
+        twitch: twitchCountValue.textContent,
+        tiktok: tiktokCountValue.textContent
+      }));
+      youtubeCountInput.value = '';
+      twitchCountInput.value = '';
+      tiktokCountInput.value = '';
+      alert('Stats mises à jour ✅');
+    });
+
+    saveGamesBtn.addEventListener('click', () => {
+      if (!isAdmin) return;
+      if (game1Input.value.trim()) game1Value.textContent = game1Input.value.trim();
+      if (game2Input.value.trim()) game2Value.textContent = game2Input.value.trim();
+      if (game3Input.value.trim()) game3Value.textContent = game3Input.value.trim();
+      localStorage.setItem('jojo_games', JSON.stringify({
+        game1: game1Value.textContent,
+        game2: game2Value.textContent,
+        game3: game3Value.textContent
+      }));
+      game1Input.value = '';
+      game2Input.value = '';
+      game3Input.value = '';
+      alert('Jeux mis à jour ✅');
+    });
+
     const savedAdminMessage = localStorage.getItem('jojo_admin_message');
-    if (savedAdminMessage) {
-      adminAnnouncement.textContent = savedAdminMessage;
+    if (savedAdminMessage) adminAnnouncement.textContent = savedAdminMessage;
+
+    const savedStats = localStorage.getItem('jojo_stats');
+    if (savedStats) {
+      const stats = JSON.parse(savedStats);
+      if (stats.youtube) youtubeCountValue.textContent = stats.youtube;
+      if (stats.twitch) twitchCountValue.textContent = stats.twitch;
+      if (stats.tiktok) tiktokCountValue.textContent = stats.tiktok;
+    }
+
+    const savedGames = localStorage.getItem('jojo_games');
+    if (savedGames) {
+      const games = JSON.parse(savedGames);
+      if (games.game1) game1Value.textContent = games.game1;
+      if (games.game2) game2Value.textContent = games.game2;
+      if (games.game3) game3Value.textContent = games.game3;
     }
 
     function getNextLiveDate(now = new Date()) {
@@ -991,12 +1080,10 @@
         const next = new Date(now);
         next.setDate(now.getDate() + i);
         const nextDay = next.getDay();
-
         if (weekdays15.includes(nextDay)) {
           next.setHours(15, 0, 0, 0);
           return next;
         }
-
         if (weekend20.includes(nextDay)) {
           next.setHours(20, 0, 0, 0);
           return next;
@@ -1004,42 +1091,44 @@
       }
     }
 
-    function formatCountdown(ms) {
-      if (ms <= 0) return '🔴 Live en cours';
-
-      const totalMinutes = Math.floor(ms / 60000);
+    function getFriendlyLiveText(now, nextLive, diffMs) {
+      const totalMinutes = Math.floor(diffMs / 60000);
       const days = Math.floor(totalMinutes / (60 * 24));
       const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
       const minutes = totalMinutes % 60;
+      const isSameDay = now.toDateString() === nextLive.toDateString();
+      const tomorrow = new Date(now);
+      tomorrow.setDate(now.getDate() + 1);
+      const isTomorrow = tomorrow.toDateString() === nextLive.toDateString();
+      const hourLabel = String(nextLive.getHours()).padStart(2, '0') + 'h';
+      const dayNames = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
 
-      let text = '⏳ Prochain live dans ';
-      if (days > 0) text += days + 'j ';
-      if (hours > 0) text += hours + 'h ';
-      if (minutes > 0 || (days === 0 && hours === 0)) text += minutes + 'min';
+      let countdown = '';
+      if (days > 0) countdown += days + 'j ';
+      if (hours > 0) countdown += hours + 'h ';
+      if (minutes > 0 || (!days && !hours)) countdown += minutes + 'min';
+      countdown = countdown.trim();
 
-      return text.trim();
+      if (diffMs <= 0) return '🔴 Le live commence maintenant !';
+      if (isSameDay) return `⏳ Aujourd'hui à ${hourLabel} (dans ${countdown})`;
+      if (isTomorrow) return `⏳ Demain à ${hourLabel} (dans ${countdown})`;
+      return `⏳ ${dayNames[nextLive.getDay()]} à ${hourLabel} (dans ${countdown})`;
     }
 
     function updateNextLiveCountdown() {
       const now = new Date();
       const nextLive = getNextLiveDate(now);
       const diff = nextLive - now;
-      nextLiveCountdown.textContent = formatCountdown(diff);
+      nextLiveCountdown.textContent = getFriendlyLiveText(now, nextLive, diff);
     }
 
     window.addEventListener('load', () => {
       updateCountdownUI();
-
-      if (countdownVisible) {
-        updateNextLiveCountdown();
-      }
-
+      updateLiveUI();
+      if (countdownVisible) updateNextLiveCountdown();
       updateAdminUI();
-
       setInterval(() => {
-        if (countdownVisible) {
-          updateNextLiveCountdown();
-        }
+        if (countdownVisible) updateNextLiveCountdown();
       }, 60000);
     });
   </script>

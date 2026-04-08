@@ -905,6 +905,14 @@
       countdownVisible = savedCountdown === 'true';
     }
 
+    const savedLiveState = localStorage.getItem('jojo_live_state');
+    const savedYoutubeState = localStorage.getItem('jojo_youtube_state');
+    const savedTiktokState = localStorage.getItem('jojo_tiktok_state');
+
+    if (savedLiveState !== null) twitchLive = savedLiveState === 'true';
+    if (savedYoutubeState !== null) youtubeOn = savedYoutubeState === 'true';
+    if (savedTiktokState !== null) tiktokOn = savedTiktokState === 'true';
+
     function updateAdminUI() {
       adminButtons.style.display = isAdmin ? 'grid' : 'none';
       adminMessageBox.style.display = isAdmin ? 'block' : 'none';
@@ -965,12 +973,14 @@
     toggleTwitch.addEventListener('click', () => {
       if (!isAdmin) return;
       twitchLive = !twitchLive;
+      localStorage.setItem('jojo_live_state', twitchLive);
       updateLiveUI();
     });
 
     toggleYoutube.addEventListener('click', () => {
       if (!isAdmin) return;
       youtubeOn = !youtubeOn;
+      localStorage.setItem('jojo_youtube_state', youtubeOn);
       if (youtubeOn) {
         youtubeStatusBox.textContent = 'ON';
         toggleYoutube.textContent = '⏸️ Désactiver vidéo YouTube';
@@ -983,6 +993,7 @@
     toggleTiktok.addEventListener('click', () => {
       if (!isAdmin) return;
       tiktokOn = !tiktokOn;
+      localStorage.setItem('jojo_tiktok_state', tiktokOn);
       if (tiktokOn) {
         tiktokStatusBox.textContent = 'ON';
         toggleTiktok.textContent = '⏸️ Désactiver TikTok';
@@ -1125,8 +1136,20 @@
     window.addEventListener('load', () => {
       updateCountdownUI();
       updateLiveUI();
+
+      if (youtubeOn) {
+        youtubeStatusBox.textContent = 'ON';
+        toggleYoutube.textContent = '⏸️ Désactiver vidéo YouTube';
+      }
+
+      if (tiktokOn) {
+        tiktokStatusBox.textContent = 'ON';
+        toggleTiktok.textContent = '⏸️ Désactiver TikTok';
+      }
+
       if (countdownVisible) updateNextLiveCountdown();
       updateAdminUI();
+
       setInterval(() => {
         if (countdownVisible) updateNextLiveCountdown();
       }, 60000);

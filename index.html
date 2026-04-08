@@ -1014,7 +1014,7 @@
       }
     }
 
-    function getFriendlyLiveText(now, nextLive, diffMs) {
+    
       const totalMinutes = Math.floor(diffMs / 60000);
       const days = Math.floor(totalMinutes / (60 * 24));
       const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
@@ -1038,12 +1038,1012 @@
       return `⏳ ${dayNames[nextLive.getDay()]} à ${hourLabel} (dans ${countdown})`;
     }
 
+    <!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>JOJO LE GAMEUR</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    :root {
+      --bg-1: #020617;
+      --bg-2: #0f172a;
+      --bg-3: #1e293b;
+      --text: #ffffff;
+      --muted: #cbd5e1;
+      --card: rgba(255, 255, 255, 0.07);
+      --border: rgba(255, 255, 255, 0.12);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, var(--bg-3) 0%, var(--bg-2) 40%, var(--bg-1) 100%);
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+      transition: background 0.35s ease;
+    }
+
+    canvas#particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .background-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.24;
+      animation: floatGlow 10s ease-in-out infinite;
+    }
+
+    .glow.one {
+      width: 320px;
+      height: 320px;
+      background: #ff0000;
+      top: 5%;
+      left: 6%;
+    }
+
+    .glow.two {
+      width: 280px;
+      height: 280px;
+      background: #9146ff;
+      bottom: 8%;
+      right: 8%;
+      animation-delay: 2s;
+    }
+
+    .glow.three {
+      width: 240px;
+      height: 240px;
+      background: #00f2ea;
+      top: 45%;
+      right: 18%;
+      animation-delay: 4s;
+    }
+
+    @keyframes floatGlow {
+      0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+      50% { transform: translateY(-30px) translateX(20px) scale(1.08); }
+    }
+
+    .cursor-glow {
+      position: fixed;
+      width: 26px;
+      height: 26px;
+      border: 2px solid rgba(255,255,255,0.55);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      box-shadow: 0 0 20px rgba(255,255,255,0.25);
+      backdrop-filter: blur(2px);
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+      border-radius: 30px;
+      padding: 34px 24px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      animation: fadeUp 0.85s ease;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
+      pointer-events: none;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-wrap {
+      display: inline-block;
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .logo-wrap::after {
+      content: "";
+      position: absolute;
+      inset: -12px;
+      border-radius: 28px;
+      background: radial-gradient(circle, rgba(145,70,255,0.24), rgba(255,0,0,0.12), transparent 70%);
+      z-index: -1;
+      animation: spinGlow 6s linear infinite;
+    }
+
+    @keyframes spinGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .logo {
+      width: 165px;
+      border-radius: 22px;
+      box-shadow: 0 0 36px rgba(255,255,255,0.14);
+      animation: pulseLogo 3s ease-in-out infinite;
+    }
+
+    @keyframes pulseLogo {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(255,255,255,0.10); }
+      50% { transform: scale(1.045); box-shadow: 0 0 45px rgba(255,255,255,0.22); }
+    }
+
+    h1 {
+      font-size: 2.45rem;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 18px rgba(255,255,255,0.08);
+    }
+
+    .tagline {
+      color: #dbeafe;
+      margin-bottom: 12px;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .typing-line {
+      font-size: 1.05rem;
+      color: #93c5fd;
+      min-height: 28px;
+      margin-bottom: 18px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 12px rgba(147,197,253,0.25);
+    }
+
+    .announce-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: rgba(251,191,36,0.12);
+      border: 1px solid rgba(251,191,36,0.28);
+      color: #fde68a;
+      padding: 12px 16px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(251,191,36,0.12);
+      font-weight: bold;
+    }
+
+    .bio {
+      margin: 0 auto 26px;
+      max-width: 680px;
+      color: #bfdbfe;
+      line-height: 1.75;
+      font-size: 0.98rem;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      margin: 38px 0 18px;
+      text-shadow: 0 0 10px rgba(255,255,255,0.07);
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 34px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-decoration: none;
+      color: white;
+      padding: 17px;
+      border-radius: 16px;
+      font-weight: bold;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
+      position: relative;
+      overflow: hidden;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.23), transparent);
+      transition: left 0.55s ease;
+    }
+
+    .btn:hover::before {
+      left: 120%;
+    }
+
+    .btn:hover {
+      transform: translateY(-4px) scale(1.02);
+      opacity: 0.98;
+    }
+
+    .btn img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .youtube {
+      background: linear-gradient(135deg, #ff1f1f, #d40000);
+      box-shadow: 0 0 25px rgba(255, 0, 0, 0.28);
+    }
+
+    .tiktok {
+      background: linear-gradient(135deg, #101010, #1f1f1f);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 0 25px rgba(0, 242, 234, 0.16);
+    }
+
+    .twitch {
+      background: linear-gradient(135deg, #9146ff, #6d28d9);
+      box-shadow: 0 0 25px rgba(145, 70, 255, 0.28);
+    }
+
+    .discord {
+      background: linear-gradient(135deg, #5865f2, #3b45c8);
+      box-shadow: 0 0 25px rgba(88, 101, 242, 0.25);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 20px 12px;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.18);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .stat-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 28px rgba(255,255,255,0.09);
+    }
+
+    .stat-box h3 {
+      font-size: 1.7rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .stat-box p {
+      color: #cbd5e1;
+      font-size: 0.92rem;
+    }
+
+    .about,
+    .youtube-video,
+    .music-box,
+    .community-box,
+    .admin-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 28px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.16);
+    }
+
+    .about {
+      color: #dbeafe;
+      line-height: 1.75;
+      text-align: left;
+    }
+
+    .youtube-video iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 0 28px rgba(255,255,255,0.06);
+    }
+
+    .community-box p,
+    .music-box p,
+    .admin-box p {
+      color: #cbd5e1;
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .community-links {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .mini-link {
+      display: block;
+      text-decoration: none;
+      color: white;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 14px;
+      font-weight: bold;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .mini-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px rgba(255,255,255,0.08);
+    }
+
+    .mini {
+      display: block;
+      text-decoration: none;
+      color: white;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 14px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .admin-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: white;
+      outline: none;
+      margin-bottom: 10px;
+    }
+
+    .music-box audio {
+      display: none;
+    }
+
+    #musicToggle {
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    .gaming-active .card {
+      animation: gamingPulse 1.8s infinite;
+    }
+
+    .gaming-active .logo {
+      filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.45));
+    }
+
+    @keyframes gamingPulse {
+      0%, 100% {
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 0 rgba(145, 70, 255, 0);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 35px rgba(145, 70, 255, 0.22);
+        transform: scale(1.01);
+      }
+    }
+
+    .footer {
+      margin-top: 12px;
+      font-size: 0.95rem;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 760px) {
+      h1 { font-size: 1.95rem; }
+      .stats, .community-links { grid-template-columns: 1fr; }
+      .card { padding: 28px 18px; }
+      .cursor-glow { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <div class="background-glow">
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+    <div class="glow three"></div>
+  </div>
+
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <div class="container">
+    <div class="card">
+      <div class="logo-wrap">
+        <img class="logo" src="logo.png" alt="JOJO LE GAMEUR" />
+      </div>
+
+      <h1>JOJO LE GAMEUR</h1>
+      <p class="tagline">🎮 Gamer • Créateur de contenu • Streamer</p>
+      <div class="typing-line"><span id="typedText"></span></div>
+
+      <div class="announce-bar" id="adminAnnouncement">
+        🔴 Live tout les jours
+      </div>
+
+      <p class="bio">
+        Bienvenue sur mon univers ! Ici tu peux retrouver toutes mes plateformes,
+        mes vidéos, mes lives et rejoindre ma communauté. Si tu aimes le gaming,
+        l'ambiance fun et les bons moments, t'es au bon endroit 🔥
+      </p>
+
+      <div id="nextLiveCountdown" class="mini">
+        ⏳ Calcul du prochain live...
+      </div>
+
+      <div class="admin-box">
+        <button class="btn discord" id="adminAccessBtn" type="button">🔐 Accès admin</button>
+
+        <div id="adminPanel" style="display:none; margin-top:16px;">
+          <p>Connexion admin</p>
+          <input id="adminUsername" class="admin-input" type="text" placeholder="Identifiant" />
+          <input id="adminPassword" class="admin-input" type="password" placeholder="Mot de passe" />
+
+          <div class="community-links" style="margin-top:10px;">
+            <button class="mini-link" id="adminLoginBtn" type="button">✅ Se connecter</button>
+            <button class="mini-link" id="adminLogoutBtn" type="button" style="display:none;">🚪 Déconnexion</button>
+          </div>
+        </div>
+
+        <div id="adminButtons" class="community-links" style="display:none; margin-top:16px;">
+          <button class="mini-link" id="toggleCountdown" type="button">⏳ Masquer le décompte</button>
+        </div>
+
+        <div id="adminMessageBox" style="display:none; margin-top:16px;">
+          <input id="adminMessageInput" class="admin-input" type="text" placeholder="Message admin du moment" />
+          <button class="mini-link" id="saveAdminMessage" type="button">📢 Mettre à jour le message</button>
+        </div>
+
+        <div id="adminStatsBox" style="display:none; margin-top:16px;">
+          <input id="youtubeCountInput" class="admin-input" type="text" placeholder="Abonnés YouTube" />
+          <input id="twitchCountInput" class="admin-input" type="text" placeholder="Followers Twitch" />
+          <input id="tiktokCountInput" class="admin-input" type="text" placeholder="Followers TikTok" />
+          <button class="mini-link" id="saveStatsBtn" type="button">📊 Mettre à jour les stats</button>
+        </div>
+
+        <div id="adminGamesBox" style="display:none; margin-top:16px;">
+          <input id="game1Input" class="admin-input" type="text" placeholder="Jeu 1" />
+          <input id="game2Input" class="admin-input" type="text" placeholder="Jeu 2" />
+          <input id="game3Input" class="admin-input" type="text" placeholder="Jeu 3" />
+          <button class="mini-link" id="saveGamesBtn" type="button">🎮 Mettre à jour les jeux</button>
+        </div>
+      </div>
+
+      <h2 class="section-title">Mes réseaux</h2>
+      <div class="links">
+        <a class="btn youtube sound-link" href="https://www.youtube.com/@jojo_legameur" target="_blank">
+          <img src="logo.png" alt="logo" /> YouTube
+        </a>
+
+        <a class="btn tiktok sound-link" href="https://www.tiktok.com/@jojo_gaming26" target="_blank">
+          <img src="logo.png" alt="logo" /> TikTok
+        </a>
+
+        <a class="btn twitch sound-link" href="https://www.twitch.tv/jojo_legameur" target="_blank">
+          <img src="logo.png" alt="logo" /> Twitch
+        </a>
+
+        <a class="btn discord sound-link" href="https://discord.gg/jgPUNbrqTx" target="_blank">
+          <img src="logo.png" alt="logo" /> Serveur Discord communautaire
+        </a>
+      </div>
+
+      <h2 class="section-title">Ma communauté</h2>
+      <div class="stats">
+        <div class="stat-box">
+          <h3 id="youtubeCountValue">19</h3>
+          <p>Abonnés YouTube</p>
+        </div>
+        <div class="stat-box">
+          <h3 id="twitchCountValue">12</h3>
+          <p>Followers Twitch</p>
+        </div>
+        <div class="stat-box">
+          <h3 id="tiktokCountValue">3181</h3>
+          <p>Followers TikTok</p>
+        </div>
+      </div>
+
+      <h2 class="section-title">Dernière vidéo</h2>
+      <div class="youtube-video">
+        <iframe
+          src="https://www.youtube.com/embed/DQAxSYAjT64"
+          title="Dernière vidéo YouTube"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+
+      <h2 class="section-title">À propos de moi</h2>
+      <div class="about">
+        <p>
+          Salut ! Moi c'est <strong>JOJO LE GAMEUR</strong>. Je partage du contenu gaming,
+          des streams, des vidéos fun et plein de moments avec la commu.
+          Mon objectif : faire kiffer, faire rire et créer une vraie ambiance avec ceux qui me suivent.
+        </p>
+        <br />
+        <p>
+          Jeux préférés, défis, nouveautés, lives et clips : ici tu retrouves tout mon univers.
+          Merci à tous ceux qui me soutiennent 🚀
+        </p>
+      </div>
+
+      <h2 class="section-title">Rejoins la commu</h2>
+      <div class="community-box">
+        <p>
+          Retrouve-moi partout et viens faire partie de la communauté pour suivre les lives,
+          les vidéos et tous les prochains projets gaming.
+        </p>
+        <div class="community-links">
+          <a class="mini-link" href="https://www.youtube.com/@jojo_legameur" target="_blank">📺 YouTube</a>
+          <a class="mini-link" href="https://www.twitch.tv/jojo_legameur" target="_blank">🎥 Twitch</a>
+          <a class="mini-link" href="https://www.tiktok.com/@jojo_gaming26" target="_blank">🎵 TikTok</a>
+          <a class="mini-link" href="https://discord.gg/jgPUNbrqTx" target="_blank">💬 Discord</a>
+        </div>
+      </div>
+
+      <h2 class="section-title">Musique / ambiance</h2>
+      <div class="music-box">
+        <button id="musicToggle" class="btn discord" type="button">🎮 Mode gaming</button>
+        <audio id="bgMusic" loop>
+          <source src="musique.mp3" type="audio/mpeg" />
+          Ton navigateur ne supporte pas l'audio.
+        </audio>
+      </div>
+
+      <h2 class="section-title">Planning de stream</h2>
+      <div class="about">
+        <p>🗓️ <strong>Lundi - Jeudi :</strong> 15h</p>
+        <p>🗓️ <strong>Vendredi - Dimanche :</strong> 20h</p>
+        <p style="margin-top:10px;">⚡ Viens en live pour du gaming, du fun et une bonne ambiance !</p>
+      </div>
+
+      <h2 class="section-title">Jeux du moment</h2>
+      <div class="community-box">
+        <div class="community-links">
+          <div class="mini-link" id="game1Value">🎮 GTA RP</div>
+          <div class="mini-link" id="game2Value">🏪 Better Mart</div>
+          <div class="mini-link" id="game3Value">🔥 Autres jeux</div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Mes clips</h2>
+      <div class="community-box">
+        <p>Retrouve mes meilleurs moments, mes extraits fun et mes clips gaming.</p>
+        <div class="community-links">
+          <a class="mini-link" href="https://www.youtube.com/@jojo_legameur" target="_blank">🎬 Clip YouTube</a>
+          <a class="mini-link" href="https://www.tiktok.com/@jojo_gaming26" target="_blank">📱 Clip TikTok</a>
+          <a class="mini-link" href="https://www.twitch.tv/jojo_legameur" target="_blank">🔴 Clip Twitch</a>
+        </div>
+      </div>
+
+      <h2 class="section-title">Soutenir la chaîne</h2>
+      <div class="community-box">
+        <p>Tu peux soutenir mon contenu et m'aider à améliorer mes streams 🙌</p>
+        <div class="community-links">
+          <a class="mini-link" href="https://paypal.me/GeoffreyBlanquet477" target="_blank">💖 Faire un don</a>
+        </div>
+      </div>
+
+      <div class="footer">© 2026 JOJO LE GAMEUR</div>
+    </div>
+  </div>
+
+  <script>
+    const words = ['Streamer Twitch', 'Créateur YouTube', 'Gaming & Ambiance', 'Rejoins la commu'];
+    const typedText = document.getElementById('typedText');
+    let wordIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+
+    function typeEffect() {
+      const currentWord = words[wordIndex];
+      if (!deleting) {
+        typedText.textContent = currentWord.substring(0, charIndex + 1);
+        charIndex++;
+        if (charIndex === currentWord.length) {
+          deleting = true;
+          setTimeout(typeEffect, 1200);
+          return;
+        }
+      } else {
+        typedText.textContent = currentWord.substring(0, charIndex - 1);
+        charIndex--;
+        if (charIndex === 0) {
+          deleting = false;
+          wordIndex = (wordIndex + 1) % words.length;
+        }
+      }
+      setTimeout(typeEffect, deleting ? 50 : 90);
+    }
+    typeEffect();
+
+    const cursorGlow = document.getElementById('cursorGlow');
+    document.addEventListener('mousemove', (e) => {
+      if (cursorGlow) {
+        cursorGlow.style.left = e.clientX + 'px';
+        cursorGlow.style.top = e.clientY + 'px';
+      }
+    });
+
+    const links = document.querySelectorAll('.sound-link');
+    const clickAudio = new Audio('data:audio/wav;base64,UklGRlQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YTAAAAAAAP//AAD//wAA//8AAP//AAD//wAA');
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        clickAudio.currentTime = 0;
+        clickAudio.play().catch(() => {});
+      });
+    });
+
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function createParticles() {
+      particles = [];
+      const count = window.innerWidth < 700 ? 35 : 65;
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 2.2 + 0.8,
+          dx: (Math.random() - 0.5) * 0.45,
+          dy: (Math.random() - 0.5) * 0.45
+        });
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(255,255,255,0.65)';
+      for (const p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      }
+      requestAnimationFrame(animateParticles);
+    }
+
+    resizeCanvas();
+    createParticles();
+    animateParticles();
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      createParticles();
+    });
+
+    const music = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    let isPlaying = false;
+
+    musicToggle.addEventListener('click', async () => {
+      try {
+        if (!isPlaying) {
+          await music.play();
+          musicToggle.textContent = '🔇 Couper le mode gaming';
+          isPlaying = true;
+          document.body.classList.add('gaming-active');
+        } else {
+          music.pause();
+          musicToggle.textContent = '🎮 Mode gaming';
+          isPlaying = false;
+          document.body.classList.remove('gaming-active');
+        }
+      } catch (e) {
+        musicToggle.textContent = '▶️ Activer le mode gaming';
+      }
+    });
+
+    const ADMIN_USERNAME = 'geoffreyblanquet80@gmail.com';
+    const ADMIN_PASSWORD = 'jojo23042024';
+
+    const adminAccessBtn = document.getElementById('adminAccessBtn');
+    const adminPanel = document.getElementById('adminPanel');
+    const adminUsername = document.getElementById('adminUsername');
+    const adminPassword = document.getElementById('adminPassword');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+    const adminButtons = document.getElementById('adminButtons');
+
+    const adminAnnouncement = document.getElementById('adminAnnouncement');
+    const adminMessageBox = document.getElementById('adminMessageBox');
+    const adminMessageInput = document.getElementById('adminMessageInput');
+    const saveAdminMessage = document.getElementById('saveAdminMessage');
+
+    const adminStatsBox = document.getElementById('adminStatsBox');
+    const youtubeCountInput = document.getElementById('youtubeCountInput');
+    const twitchCountInput = document.getElementById('twitchCountInput');
+    const tiktokCountInput = document.getElementById('tiktokCountInput');
+    const saveStatsBtn = document.getElementById('saveStatsBtn');
+
+    const adminGamesBox = document.getElementById('adminGamesBox');
+    const game1Input = document.getElementById('game1Input');
+    const game2Input = document.getElementById('game2Input');
+    const game3Input = document.getElementById('game3Input');
+    const saveGamesBtn = document.getElementById('saveGamesBtn');
+
+    const nextLiveCountdown = document.getElementById('nextLiveCountdown');
+
+    const youtubeCountValue = document.getElementById('youtubeCountValue');
+    const twitchCountValue = document.getElementById('twitchCountValue');
+    const tiktokCountValue = document.getElementById('tiktokCountValue');
+
+    const game1Value = document.getElementById('game1Value');
+    const game2Value = document.getElementById('game2Value');
+    const game3Value = document.getElementById('game3Value');
+
+    const toggleCountdown = document.getElementById('toggleCountdown');
+
+    let isAdmin = false;
+    let countdownVisible = true;
+
+    const savedCountdown = localStorage.getItem('jojo_countdown');
+    if (savedCountdown !== null) {
+      countdownVisible = savedCountdown === 'true';
+    }
+
+    function updateAdminUI() {
+      adminButtons.style.display = isAdmin ? 'grid' : 'none';
+      adminMessageBox.style.display = isAdmin ? 'block' : 'none';
+      adminStatsBox.style.display = isAdmin ? 'block' : 'none';
+      adminGamesBox.style.display = isAdmin ? 'block' : 'none';
+      adminLogoutBtn.style.display = isAdmin ? 'block' : 'none';
+      adminLoginBtn.style.display = isAdmin ? 'none' : 'block';
+    }
+
+    function updateCountdownUI() {
+      if (countdownVisible) {
+        nextLiveCountdown.style.display = 'block';
+        toggleCountdown.textContent = '⏳ Masquer le décompte';
+      } else {
+        nextLiveCountdown.style.display = 'none';
+        toggleCountdown.textContent = '⏳ Afficher le décompte';
+      }
+    }
+
+    adminAccessBtn.addEventListener('click', () => {
+      adminPanel.style.display = adminPanel.style.display === 'none' ? 'block' : 'none';
+    });
+
+    adminLoginBtn.addEventListener('click', () => {
+      if (adminUsername.value === ADMIN_USERNAME && adminPassword.value === ADMIN_PASSWORD) {
+        isAdmin = true;
+        updateAdminUI();
+        alert('Connexion admin réussie 🔥');
+      } else {
+        alert('Identifiant ou mot de passe incorrect ❌');
+      }
+    });
+
+    adminLogoutBtn.addEventListener('click', () => {
+      isAdmin = false;
+      adminUsername.value = '';
+      adminPassword.value = '';
+      updateAdminUI();
+      alert('Déconnexion admin');
+    });
+
+    toggleCountdown.addEventListener('click', () => {
+      if (!isAdmin) return;
+      countdownVisible = !countdownVisible;
+      localStorage.setItem('jojo_countdown', String(countdownVisible));
+      updateCountdownUI();
+    });
+
+    saveAdminMessage.addEventListener('click', () => {
+      const newMessage = adminMessageInput.value.trim();
+      if (!isAdmin || !newMessage) return;
+
+      adminAnnouncement.textContent = newMessage;
+      localStorage.setItem('jojo_admin_message', newMessage);
+      adminMessageInput.value = '';
+      alert('Message mis à jour ✅');
+    });
+
+    saveStatsBtn.addEventListener('click', () => {
+      if (!isAdmin) return;
+
+      if (youtubeCountInput.value.trim()) youtubeCountValue.textContent = youtubeCountInput.value.trim();
+      if (twitchCountInput.value.trim()) twitchCountValue.textContent = twitchCountInput.value.trim();
+      if (tiktokCountInput.value.trim()) tiktokCountValue.textContent = tiktokCountInput.value.trim();
+
+      localStorage.setItem('jojo_stats', JSON.stringify({
+        youtube: youtubeCountValue.textContent,
+        twitch: twitchCountValue.textContent,
+        tiktok: tiktokCountValue.textContent
+      }));
+
+      youtubeCountInput.value = '';
+      twitchCountInput.value = '';
+      tiktokCountInput.value = '';
+      alert('Stats mises à jour ✅');
+    });
+
+    saveGamesBtn.addEventListener('click', () => {
+      if (!isAdmin) return;
+
+      if (game1Input.value.trim()) game1Value.textContent = game1Input.value.trim();
+      if (game2Input.value.trim()) game2Value.textContent = game2Input.value.trim();
+      if (game3Input.value.trim()) game3Value.textContent = game3Input.value.trim();
+
+      localStorage.setItem('jojo_games', JSON.stringify({
+        game1: game1Value.textContent,
+        game2: game2Value.textContent,
+        game3: game3Value.textContent
+      }));
+
+      game1Input.value = '';
+      game2Input.value = '';
+      game3Input.value = '';
+      alert('Jeux mis à jour ✅');
+    });
+
+    const savedAdminMessage = localStorage.getItem('jojo_admin_message');
+    if (savedAdminMessage) adminAnnouncement.textContent = savedAdminMessage;
+
+    const savedStats = localStorage.getItem('jojo_stats');
+    if (savedStats) {
+      const stats = JSON.parse(savedStats);
+      if (stats.youtube) youtubeCountValue.textContent = stats.youtube;
+      if (stats.twitch) twitchCountValue.textContent = stats.twitch;
+      if (stats.tiktok) tiktokCountValue.textContent = stats.tiktok;
+    }
+
+    const savedGames = localStorage.getItem('jojo_games');
+    if (savedGames) {
+      const games = JSON.parse(savedGames);
+      if (games.game1) game1Value.textContent = games.game1;
+      if (games.game2) game2Value.textContent = games.game2;
+      if (games.game3) game3Value.textContent = games.game3;
+    }
+
+    function getNextLiveDate(now = new Date()) {
+      const day = now.getDay();
+      const weekdays15 = [1, 2, 3, 4];
+      const weekend20 = [5, 6, 0];
+
+      if (weekdays15.includes(day)) {
+        const today15 = new Date(now);
+        today15.setHours(15, 0, 0, 0);
+        if (now < today15) return today15;
+      }
+
+      if (weekend20.includes(day)) {
+        const today20 = new Date(now);
+        today20.setHours(20, 0, 0, 0);
+        if (now < today20) return today20;
+      }
+
+      for (let i = 1; i <= 7; i++) {
+        const next = new Date(now);
+        next.setDate(now.getDate() + i);
+        const nextDay = next.getDay();
+
+        if (weekdays15.includes(nextDay)) {
+          next.setHours(15, 0, 0, 0);
+          return next;
+        }
+
+        if (weekend20.includes(nextDay)) {
+          next.setHours(20, 0, 0, 0);
+          return next;
+        }
+      }
+    }
+
+    function getFriendlyLiveText(now, nextLive, diffMs) {
+      const totalMinutes = Math.floor(diffMs / 60000);
+      const days = Math.floor(totalMinutes / (60 * 24));
+      const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+      const minutes = totalMinutes % 60;
+
+      const isSameDay = now.toDateString() === nextLive.toDateString();
+      const tomorrow = new Date(now);
+      tomorrow.setDate(now.getDate() + 1);
+      const isTomorrow = tomorrow.toDateString() === nextLive.toDateString();
+
+      const hourLabel = String(nextLive.getHours()).padStart(2, '0') + 'h';
+      const dayNames = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+
+      let countdown = '';
+      if (days > 0) countdown += days + 'j ';
+      if (hours > 0) countdown += hours + 'h ';
+      if (minutes > 0 || (!days && !hours)) countdown += minutes + 'min';
+      countdown = countdown.trim();
+
+      if (diffMs <= 0) return '🔴 Le live commence maintenant !';
+      if (isSameDay) return `⏳ Aujourd'hui à ${hourLabel} (dans ${countdown})`;
+      if (isTomorrow) return `⏳ Demain à ${hourLabel} (dans ${countdown})`;
+      return `⏳ ${dayNames[nextLive.getDay()]} à ${hourLabel} (dans ${countdown})`;
+    }
+
     function updateNextLiveCountdown() {
       const now = new Date();
       const nextLive = getNextLiveDate(now);
       const diff = nextLive - now;
       nextLiveCountdown.textContent = getFriendlyLiveText(now, nextLive, diff);
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCountdownUI();
+      updateNextLiveCountdown();
+      updateAdminUI();
+
+      setInterval(() => {
+        if (countdownVisible) updateNextLiveCountdown();
+      }, 60000);
+    });
+  </script>
+</body>
+</html>
 
     window.addEventListener('load', () => {
       updateCountdownUI();

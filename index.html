@@ -229,7 +229,7 @@
       padding: 12px 18px;
       border-radius: 999px;
       font-weight: bold;
-      margin-bottom: 28px;
+      margin-bottom: 18px;
       box-shadow: 0 0 28px rgba(255, 0, 0, 0.2);
       animation: pulseLive 1.6s infinite;
     }
@@ -422,6 +422,19 @@
       box-shadow: 0 0 20px rgba(255,255,255,0.08);
     }
 
+    .mini {
+      display: block;
+      text-decoration: none;
+      color: white;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 14px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
     .admin-input {
       width: 100%;
       padding: 12px 14px;
@@ -509,6 +522,10 @@
       <div class="live-badge" id="liveBadge">
         <span class="live-dot"></span>
         ⚫ Hors ligne sur Twitch
+      </div>
+
+      <div id="nextLiveCountdown" class="mini">
+        ⏳ Calcul du prochain live...
       </div>
 
       <div class="admin-box">
@@ -825,6 +842,7 @@
     const saveAdminMessage = document.getElementById('saveAdminMessage');
 
     const liveBadge = document.getElementById('liveBadge');
+    const nextLiveCountdown = document.getElementById('nextLiveCountdown');
     const twitchStatusBox = document.getElementById('twitchStatusBox').querySelector('h3');
     const youtubeStatusBox = document.getElementById('youtubeStatusBox').querySelector('h3');
     const tiktokStatusBox = document.getElementById('tiktokStatusBox').querySelector('h3');
@@ -925,6 +943,66 @@
     if (savedAdminMessage) {
       adminAnnouncement.textContent = savedAdminMessage;
     }
+
+    function getNextLiveDate(now = new Date()) {
+      const day = now.getDay(); // 0=dimanche, 1=lundi ... 6=samedi
+      const weekdays15 = [1, 2, 3, 4]; // lundi à jeudi à 15h
+      const weekend20 = [5, 6, 0]; // vendredi à dimanche à 20h
+
+      if (weekdays15.includes(day)) {
+        const today15 = new Date(now);
+        today15.setHours(15, 0, 0, 0);
+        if (now < today15) return today15;
+      }
+
+      if (weekend20.includes(day)) {
+        const today20 = new Date(now);
+        today20.setHours(20, 0, 0, 0);
+        if (now < today20) return today20;
+      }
+
+      for (let i = 1; i <= 7; i++) {
+        const next = new Date(now);
+        next.setDate(now.getDate() + i);
+        const nextDay = next.getDay();
+
+        if (weekdays15.includes(nextDay)) {
+          next.setHours(15, 0, 0, 0);
+          return next;
+        }
+
+        if (weekend20.includes(nextDay)) {
+          next.setHours(20, 0, 0, 0);
+          return next;
+        }
+      }
+    }
+
+    function formatCountdown(ms) {
+      if (ms <= 0) return '🔴 Le live commence maintenant !';
+
+      const totalMinutes = Math.floor(ms / 60000);
+      const days = Math.floor(totalMinutes / (60 * 24));
+      const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+      const minutes = totalMinutes % 60;
+
+      let text = '⏳ Prochain live dans ';
+      if (days > 0) text += days + 'j ';
+      if (hours > 0) text += hours + 'h ';
+      if (minutes > 0 || (days === 0 && hours === 0)) text += minutes + 'min';
+
+      return text.trim();
+    }
+
+    function updateNextLiveCountdown() {
+      const now = new Date();
+      const nextLive = getNextLiveDate(now);
+      const diff = nextLive - now;
+      nextLiveCountdown.textContent = formatCountdown(diff);
+    }
+
+    updateNextLiveCountdown();
+    setInterval(updateNextLiveCountdown, 60000);
 
     updateAdminUI();
   </script>

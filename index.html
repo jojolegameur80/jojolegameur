@@ -1001,10 +1001,11 @@
       nextLiveCountdown.textContent = formatCountdown(diff);
     }
 
-    updateNextLiveCountdown();
-    setInterval(updateNextLiveCountdown, 60000);
-
-    updateAdminUI();
+    window.addEventListener('load', () => {
+  updateNextLiveCountdown();
+  updateAdminUI();
+  setInterval(updateNextLiveCountdown, 60000);
+});
   </script>
 </body>
 </html>

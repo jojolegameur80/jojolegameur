@@ -225,40 +225,6 @@
       font-size: 0.98rem;
     }
 
-    .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255, 0, 0, 0.16);
-      border: 1px solid rgba(255, 0, 0, 0.35);
-      color: #fff;
-      padding: 12px 18px;
-      border-radius: 999px;
-      font-weight: bold;
-      margin-bottom: 18px;
-      box-shadow: 0 0 28px rgba(255, 0, 0, 0.2);
-      animation: pulseLive 1.6s infinite;
-    }
-
-    @keyframes pulseLive {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-    }
-
-    .live-dot {
-      width: 11px;
-      height: 11px;
-      background: #ff2b2b;
-      border-radius: 50%;
-      animation: blink 1.1s infinite;
-      box-shadow: 0 0 12px #ff2b2b;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.35; }
-    }
-
     .section-title {
       font-size: 1.4rem;
       margin: 38px 0 18px;
@@ -334,30 +300,6 @@
     .discord {
       background: linear-gradient(135deg, #5865f2, #3b45c8);
       box-shadow: 0 0 25px rgba(88, 101, 242, 0.25);
-    }
-
-    .live-join {
-      display: none;
-      margin-bottom: 20px;
-    }
-
-    .live-join.show {
-      display: block;
-    }
-
-    .live-join a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 16px 22px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #ff2b2b, #b40000);
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      box-shadow: 0 0 28px rgba(255, 0, 0, 0.35);
-      animation: pulseLive 1.4s infinite;
     }
 
     .stats {
@@ -549,15 +491,6 @@
         l'ambiance fun et les bons moments, t'es au bon endroit 🔥
       </p>
 
-      <div class="live-badge" id="liveBadge">
-        <span class="live-dot"></span>
-        ⚫ Hors ligne sur Twitch
-      </div>
-
-      <div class="live-join" id="liveJoinButton">
-        <a href="https://www.twitch.tv/jojo_legameur" target="_blank">🔴 Rejoindre le live</a>
-      </div>
-
       <div id="nextLiveCountdown" class="mini">
         ⏳ Calcul du prochain live...
       </div>
@@ -600,21 +533,6 @@
           <input id="game2Input" class="admin-input" type="text" placeholder="Jeu 2" />
           <input id="game3Input" class="admin-input" type="text" placeholder="Jeu 3" />
           <button class="mini-link" id="saveGamesBtn" type="button">🎮 Mettre à jour les jeux</button>
-        </div>
-      </div>
-
-      <div class="stats" style="margin-top: 0; margin-bottom: 30px;">
-        <div class="stat-box" id="youtubeStatusBox">
-          <h3>OFF</h3>
-          <p>Statut YouTube</p>
-        </div>
-        <div class="stat-box" id="twitchStatusBox">
-          <h3>OFF</h3>
-          <p>Statut Twitch</p>
-        </div>
-        <div class="stat-box" id="tiktokStatusBox">
-          <h3>OFF</h3>
-          <p>Statut TikTok</p>
         </div>
       </div>
 
@@ -874,12 +792,7 @@
     const game3Input = document.getElementById('game3Input');
     const saveGamesBtn = document.getElementById('saveGamesBtn');
 
-    const liveBadge = document.getElementById('liveBadge');
-    const liveJoinButton = document.getElementById('liveJoinButton');
     const nextLiveCountdown = document.getElementById('nextLiveCountdown');
-    const twitchStatusBox = document.getElementById('twitchStatusBox').querySelector('h3');
-    const youtubeStatusBox = document.getElementById('youtubeStatusBox').querySelector('h3');
-    const tiktokStatusBox = document.getElementById('tiktokStatusBox').querySelector('h3');
 
     const youtubeCountValue = document.getElementById('youtubeCountValue');
     const twitchCountValue = document.getElementById('twitchCountValue');
@@ -934,17 +847,27 @@
 
     function updateLiveUI() {
       if (twitchLive) {
-        liveBadge.innerHTML = '<span class="live-dot"></span> 🔴 EN LIVE SUR TWITCH';
-        twitchStatusBox.textContent = 'ON';
         toggleTwitch.textContent = '⚫ Désactiver LIVE Twitch';
-        liveJoinButton.classList.add('show');
         document.body.classList.add('live-mode');
       } else {
-        liveBadge.innerHTML = '<span class="live-dot"></span> ⚫ Hors ligne sur Twitch';
-        twitchStatusBox.textContent = 'OFF';
         toggleTwitch.textContent = '🔴 Activer LIVE Twitch';
-        liveJoinButton.classList.remove('show');
         document.body.classList.remove('live-mode');
+      }
+    }
+
+    function applySavedStates() {
+      updateLiveUI();
+
+      if (youtubeOn) {
+        toggleYoutube.textContent = '⏸️ Désactiver vidéo YouTube';
+      } else {
+        toggleYoutube.textContent = '📺 Activer vidéo YouTube';
+      }
+
+      if (tiktokOn) {
+        toggleTiktok.textContent = '⏸️ Désactiver TikTok';
+      } else {
+        toggleTiktok.textContent = '🎵 Activer TikTok';
       }
     }
 
@@ -967,40 +890,29 @@
       adminUsername.value = '';
       adminPassword.value = '';
       updateAdminUI();
+      applySavedStates();
       alert('Déconnexion admin');
     });
 
     toggleTwitch.addEventListener('click', () => {
       if (!isAdmin) return;
       twitchLive = !twitchLive;
-      localStorage.setItem('jojo_live_state', twitchLive);
-      updateLiveUI();
+      localStorage.setItem('jojo_live_state', String(twitchLive));
+      applySavedStates();
     });
 
     toggleYoutube.addEventListener('click', () => {
       if (!isAdmin) return;
       youtubeOn = !youtubeOn;
-      localStorage.setItem('jojo_youtube_state', youtubeOn);
-      if (youtubeOn) {
-        youtubeStatusBox.textContent = 'ON';
-        toggleYoutube.textContent = '⏸️ Désactiver vidéo YouTube';
-      } else {
-        youtubeStatusBox.textContent = 'OFF';
-        toggleYoutube.textContent = '📺 Activer vidéo YouTube';
-      }
+      localStorage.setItem('jojo_youtube_state', String(youtubeOn));
+      applySavedStates();
     });
 
     toggleTiktok.addEventListener('click', () => {
       if (!isAdmin) return;
       tiktokOn = !tiktokOn;
-      localStorage.setItem('jojo_tiktok_state', tiktokOn);
-      if (tiktokOn) {
-        tiktokStatusBox.textContent = 'ON';
-        toggleTiktok.textContent = '⏸️ Désactiver TikTok';
-      } else {
-        tiktokStatusBox.textContent = 'OFF';
-        toggleTiktok.textContent = '🎵 Activer TikTok';
-      }
+      localStorage.setItem('jojo_tiktok_state', String(tiktokOn));
+      applySavedStates();
     });
 
     toggleCountdown.addEventListener('click', () => {
@@ -1135,18 +1047,7 @@
 
     window.addEventListener('load', () => {
       updateCountdownUI();
-      updateLiveUI();
-
-      if (youtubeOn) {
-        youtubeStatusBox.textContent = 'ON';
-        toggleYoutube.textContent = '⏸️ Désactiver vidéo YouTube';
-      }
-
-      if (tiktokOn) {
-        tiktokStatusBox.textContent = 'ON';
-        toggleTiktok.textContent = '⏸️ Désactiver TikTok';
-      }
-
+      applySavedStates();
       if (countdownVisible) updateNextLiveCountdown();
       updateAdminUI();
 

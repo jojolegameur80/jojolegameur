@@ -546,6 +546,7 @@
           <button class="mini-link" id="toggleTwitch" type="button">🔴 Activer LIVE Twitch</button>
           <button class="mini-link" id="toggleYoutube" type="button">📺 Activer vidéo YouTube</button>
           <button class="mini-link" id="toggleTiktok" type="button">🎵 Activer TikTok</button>
+          <button class="mini-link" id="toggleCountdown" type="button">⏳ Masquer le décompte</button>
         </div>
 
         <div id="adminMessageBox" style="display:none; margin-top:16px;">
@@ -850,17 +851,34 @@
     const toggleTwitch = document.getElementById('toggleTwitch');
     const toggleYoutube = document.getElementById('toggleYoutube');
     const toggleTiktok = document.getElementById('toggleTiktok');
+    const toggleCountdown = document.getElementById('toggleCountdown');
 
     let isAdmin = false;
     let twitchLive = false;
     let youtubeOn = false;
     let tiktokOn = false;
+    let countdownVisible = true;
+
+    const savedCountdown = localStorage.getItem('jojo_countdown');
+    if (savedCountdown !== null) {
+      countdownVisible = savedCountdown === 'true';
+    }
 
     function updateAdminUI() {
       adminButtons.style.display = isAdmin ? 'grid' : 'none';
       adminMessageBox.style.display = isAdmin ? 'block' : 'none';
       adminLogoutBtn.style.display = isAdmin ? 'block' : 'none';
       adminLoginBtn.style.display = isAdmin ? 'none' : 'block';
+    }
+
+    function updateCountdownUI() {
+      if (countdownVisible) {
+        nextLiveCountdown.style.display = 'block';
+        toggleCountdown.textContent = '⏳ Masquer le décompte';
+      } else {
+        nextLiveCountdown.style.display = 'none';
+        toggleCountdown.textContent = '⏳ Afficher le décompte';
+      }
     }
 
     adminAccessBtn.addEventListener('click', () => {
@@ -929,6 +947,14 @@
       }
     });
 
+    toggleCountdown.addEventListener('click', () => {
+      if (!isAdmin) return;
+
+      countdownVisible = !countdownVisible;
+      localStorage.setItem('jojo_countdown', countdownVisible);
+      updateCountdownUI();
+    });
+
     saveAdminMessage.addEventListener('click', () => {
       const newMessage = adminMessageInput.value.trim();
       if (!isAdmin || !newMessage) return;
@@ -945,9 +971,9 @@
     }
 
     function getNextLiveDate(now = new Date()) {
-      const day = now.getDay(); // 0=dimanche, 1=lundi ... 6=samedi
-      const weekdays15 = [1, 2, 3, 4]; // lundi à jeudi à 15h
-      const weekend20 = [5, 6, 0]; // vendredi à dimanche à 20h
+      const day = now.getDay();
+      const weekdays15 = [1, 2, 3, 4];
+      const weekend20 = [5, 6, 0];
 
       if (weekdays15.includes(day)) {
         const today15 = new Date(now);
@@ -1002,10 +1028,20 @@
     }
 
     window.addEventListener('load', () => {
-  updateNextLiveCountdown();
-  updateAdminUI();
-  setInterval(updateNextLiveCountdown, 60000);
-});
+      updateCountdownUI();
+
+      if (countdownVisible) {
+        updateNextLiveCountdown();
+      }
+
+      updateAdminUI();
+
+      setInterval(() => {
+        if (countdownVisible) {
+          updateNextLiveCountdown();
+        }
+      }, 60000);
+    });
   </script>
 </body>
 </html>
